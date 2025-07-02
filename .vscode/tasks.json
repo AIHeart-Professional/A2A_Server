@@ -1,0 +1,13 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run MCP Tool Only Server",
+            "type": "shell",
+            "command": ".venv\\Scripts\\python.exe",
+            "args": ["-m", "mcp_tool_only_server"],
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
+}

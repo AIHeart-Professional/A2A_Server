@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "mcp-tool-only-server": {
+      "type": "stdio",
+      "command": ".venv\\Scripts\\python.exe",
+      "args": ["-m", "mcp_tool_only_server"]
+    }
+  }
+}
