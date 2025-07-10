@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
+from src.mcp_tool_only_server.app import execute_request
 import logging
 
 # Configure logging
@@ -8,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 
 # --- Application Setup ---
 
-app = FastAPI(title="Discord RP Bot AI API")
+app = FastAPI(title="Discord RP Bot MCP Server API")
 
 
 @app.on_event("startup")
@@ -33,14 +34,6 @@ async def interpret_query(request: QueryRequest):
     """
     API endpoint to interpret a user query using the MCP workflow.
     """
-    user_id = "anonymous"
-    if request.session_context and 'user' in request.session_context and 'id' in request.session_context['user']:
-        user_id = request.session_context['user']['id']
-
     # Route the request through the MCP interpreter
-    response = await interpreter.route_request(
-        user_id=user_id,
-        message=request.user_query,
-        session_context=request.session_context or {}
-    )
+    response = await execute_request(request.model_dump())
     return response
