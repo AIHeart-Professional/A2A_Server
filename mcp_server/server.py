@@ -9,7 +9,7 @@ import mcp.server.stdio
 # Store notes as a simple key-value dict to demonstrate state management
 notes: dict[str, str] = {}
 
-server = Server("MCP_Tool_Only_Server")
+server = Server("MCP_Server")
 
 @server.list_resources()
 async def handle_list_resources() -> list[types.Resource]:

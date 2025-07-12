@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-from src.mcp_tool_only_server.app import execute_request
+from mcp_server.app import execute_request
 import logging
 
 # Configure logging
@@ -25,9 +25,13 @@ async def shutdown_event():
 
 # --- API Models and Endpoints ---
 
-class QueryRequest(BaseModel):
+class InitialRequest(BaseModel):
     user_query: str
-    session_context: Optional[Dict[str, Any]] = None
+    user_id: str
+    server_id: str
+    
+class QueryRequest(BaseModel):
+    initial_request: InitialRequest
 
 @app.post("/MCP")
 async def interpret_query(request: QueryRequest):

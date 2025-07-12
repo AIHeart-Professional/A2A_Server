@@ -9,8 +9,8 @@ async def handle_intent(user_query: dict) -> dict:
         dict: The intent as returned by the plans API.
     """
     plans_api_url = "http://localhost:8001/llm/intent"  # Update with actual plans API endpoint
-    async with httpx.AsyncClient() as client:
-        response = await client.post(plans_api_url, json={"user_query": user_query})
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        response = await client.post(plans_api_url, json={**user_query})
         response.raise_for_status()
         return response.json()
 
@@ -24,8 +24,8 @@ async def handle_intent_details(intent: dict, user_query: dict) -> dict:
         dict: The updated intent with additional fields.
     """
     additional_fields_api_url = "http://localhost:8001/llm/set_fields"  # Update with actual API endpoint
-    async with httpx.AsyncClient() as client:
-        response = await client.post(additional_fields_api_url, json={**intent, "user_query": user_query})
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        response = await client.post(additional_fields_api_url, json={**intent, **user_query})
         response.raise_for_status()
         # Add response data to the intent
         intent.update(response.json())
