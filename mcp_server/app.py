@@ -5,6 +5,7 @@ from .validation import validate_request
 from cache.cache import cache
 import logging
 import asyncio
+import yaml
 
 async def execute_request(request: dict) -> dict:
     """
@@ -60,3 +61,11 @@ async def execute_request(request: dict) -> dict:
     result = await handle_orchestrator(plans, formatted_request)
     
     return result
+
+async def get_tools() -> str:
+    """
+    Returns the entire tools.yaml file as a string.
+    """
+    with open('static/tools.yaml', 'r', encoding='utf-8') as f:
+        tools_str = f.read()
+    return tools_str

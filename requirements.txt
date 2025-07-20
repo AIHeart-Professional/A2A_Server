@@ -3,3 +3,10 @@ pydantic
 fastapi
 uvicorn
 cachetools
+pyyaml
+langgraph
+langchain
+requests
+langchain_openai
+graphviz
+ipython
