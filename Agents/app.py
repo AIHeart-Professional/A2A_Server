@@ -4,14 +4,14 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-async def execute_agent(agent: str, action: str, fields: dict) -> dict:
+async def execute_agent(agent: str, action: str, fields: dict, context: dict) -> dict:
     """
     Dynamically imports and calls the specified agent.
     """
     try:
         logging.info(f"Executing agent: {agent} with action: {action}")
         agent_module = importlib.import_module(f"Agents.{agent}")
-        agent_response = await agent_module.run_agent(action, fields)
+        agent_response = await agent_module.run_agent(action, fields, context)
         return agent_response
     except ImportError as e:
         logging.error(f"Error importing agent: {e}")

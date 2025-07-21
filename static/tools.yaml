@@ -27,55 +27,59 @@ tools:
         - characters_name  
         - characters_class         
       fields:
-        character:
-          first_name: The character's first name (string).
-          last_name: The character's last name (string).
-          characters_name: The display name of the character (string).
-          characters_class: The character's class or role (string).
-          cursor_color: The color of the character's cursor (string).
-          height: The character's height in meters (float).
-          physique: The character's body type (string).
-          age: The character's age (integer).
-          birthday: The character's birthday (ISO date string).
-          bio: The character's biography or description (string).
-          level: The character's current level (integer).
-          experience: The character's current experience points (integer).
-          experience_to_next_level: Experience required for next level (integer).
-        inventory:
-          equipment: List of equipped items (array).
-          consumables: List of consumable items (array).
-          misc: List of miscellaneous items (array).
-          cratable: List of items that can be crafted (array).
-          key_items: List of key items (array).
-          currency: Amount of in-game currency (integer).
-        equipped:
-          head: Equipped head item (string or null).
-          chest: Equipped chest item (string or null).
-          legs: Equipped leg item (string or null).
-          arms: Equipped arm item (string or null).
-          accessory1: First accessory slot (string or null).
-          accessory2: Second accessory slot (string or null).
-          left_hand: Item equipped in left hand (string or null).
-          right_hand: Item equipped in right hand (string or null).
-        group:
-          guild: The character's guild (string or null).
-          party: The character's party (string or null).
-        stats:
-          hp: Hit points (integer).
-          str: Strength stat (integer).
-          def: Defense stat (integer).
-          spe: Speed stat (integer).
-          dex: Dexterity stat (integer).
-          cha: Charisma stat (integer).
-          points_to_distribute: Unallocated stat points (integer).
-        combat:
-          status_ailment: Current status ailment (string or null).
-          battle_status: Whether the character is in battle (boolean).
-          damage: Damage dealt (integer).
-          defense: Defense value (integer).
-          current_hp: Current hit points (integer).
-        player:
-          user_id: The unique identifier (UUID) of the users account whose details are being requested.
-          server_id: The unique identifier (UUID) of the server where the user is located.
-          active: Whether the character is currently active (boolean).
+        first_name: The character's first name (string).
+        last_name: The character's last name (string).
+        characters_name: The display name of the character (string).
+        characters_class: The character's class or role (string).
+        cursor_color: The color of the character's cursor (string).
+        height: The character's height in meters (float).
+        physique: The character's body type (string).
+        age: The character's age (integer).
+        birthday: The character's birthday (ISO date string).
+        bio: The character's biography or description (string).
+        level: The character's current level (integer).
+        experience: The character's current experience points (integer).
+        experience_to_next_level: Experience required for next level (integer).
+        equipment: List of equipped items (array).
+        consumables: List of consumable items (array).
+        misc: List of miscellaneous items (array).
+        cratable: List of items that can be crafted (array).
+        key_items: List of key items (array).
+        currency: Amount of in-game currency (integer).
+        head: Equipped head item (string or null).
+        chest: Equipped chest item (string or null).
+        legs: Equipped leg item (string or null).
+        arms: Equipped arm item (string or null).
+        accessory1: First accessory slot (string or null).
+        accessory2: Second accessory slot (string or null).
+        left_hand: Item equipped in left hand (string or null).
+        right_hand: Item equipped in right hand (string or null).
+        guild: The character's guild (string or null).
+        party: The character's party (string or null).
+        hp: Hit points (integer).
+        str: Strength stat (integer).
+        def: Defense stat (integer).
+        spe: Speed stat (integer).
+        dex: Dexterity stat (integer).
+        cha: Charisma stat (integer).
+        points_to_distribute: Unallocated stat points (integer).
+        status_ailment: Current status ailment (string or null).
+        battle_status: Whether the character is in battle (boolean).
+        damage: Damage dealt (integer).
+        defense: Defense value (integer).
+        current_hp: Current hit points (integer).
+        user_id: The unique identifier (UUID) of the users account whose details are being requested.
+        server_id: The unique identifier (UUID) of the server where the user is located.
+        active: Whether the character is currently active (boolean).
+
+tools:
+  - agent: error
+    tool:
+      name: missing_fields
+      description: stores response and gives error message requesting missing fields
+      fields:
+        server_id: The unique identifier (UUID) of the server where the character is located.
+        user_id: The unique identifier (UUID) of the user making the request.
+        missing_fields: A list of the missing fields that are required for the request.
+
 

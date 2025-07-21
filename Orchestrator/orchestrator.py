@@ -13,11 +13,11 @@ logger = logging.getLogger(__name__)
 
 class OrchestratorState(TypedDict):
     tasks: List[dict]
-    plan: List[str]
     intent: str
     original_request: dict
     current_step: int
-    results: Annotated[List[str], lambda x, y: x + y]
+    results: Annotated[List[dict], lambda x, y: x + y]
+    context: dict
 
 async def run_orchestrator(request: dict, details: dict):
     """
@@ -29,9 +29,9 @@ async def run_orchestrator(request: dict, details: dict):
         "tasks": details.get("tasks", []),
         "intent": details.get("intent"),
         "original_request": request.get("initial_request"),
-        "plan": request,
         "current_step": 0,
         "results": [],
+        "context": {},
     }
     app_graph = await define_nodes(initial_state["tasks"])
     return await app_graph.ainvoke(initial_state)
@@ -57,7 +57,7 @@ async def define_nodes(tasks):
         if idx == num_steps - 1:
             workflow.add_conditional_edges(
                 node_name, 
-                route_node, 
+                should_continue, 
                 {
                     "END": END
                     }
@@ -67,7 +67,7 @@ async def define_nodes(tasks):
         #    workflow.add_edge(node_name, next_node)
             workflow.add_conditional_edges(
                 node_name, 
-                route_node, 
+                should_continue, 
                 {
                     "CONTINUE": next_node, 
                     "END": END
@@ -80,6 +80,7 @@ async def define_nodes(tasks):
 
 async def run_step(state, step_idx):
     step = state["tasks"]["task_" + str(step_idx + 1)]
+    context = state.get("context", {})
     if isinstance(step, dict):
         tool = step.get("tool", {})
         action = tool.get("name")
@@ -91,18 +92,26 @@ async def run_step(state, step_idx):
     else:
         step_name = step
     logger.info(f"Executing step: {step_name} by calling {agent}.")
-    result = await call_agent(agent, action, step["tool"].get("fields", {}))
-    new_results = state["results"] + [str(result)]
+    result = await call_agent(agent, action, step["tool"].get("fields", {}), context)
+    
+    if isinstance(result, dict):
+        # If the tool name isn't in the context, add it with a list for results
+        if action not in context:
+            context[action] = []
+        # Append the new result to the list for that tool
+        context[action].append(result)
+        
+    new_results = state["results"] + [result]
     # If error occurs, return the error message and stop
-    if "error" in result:
+    if isinstance(result, dict) and "error" in result:
         logger.error(f"Error occurred: {result['error']}. Ending workflow.")
-        return {**state, "current_step": state["current_step"] + 1, "results": new_results}
-    return {**state, "current_step": state["current_step"] + 1, "results": new_results}
+        return {**state, "current_step": state["current_step"] + 1, "results": new_results, "context": context}
+    return {**state, "current_step": state["current_step"] + 1, "results": new_results, "context": context}
 
-async def call_agent(agent: str, action: str, fields: dict):
+async def call_agent(agent: str, action: str, fields: dict, context: dict):
     """Generic function to call an agent."""
     try:
-        response = await execute_agent(agent, action, fields)
+        response = await execute_agent(agent, action, fields, context)
         return response
     except Exception as e:
         logging.error(f"Error calling agent {agent} with action {action}: {e}")
@@ -111,14 +120,17 @@ async def call_agent(agent: str, action: str, fields: dict):
 async def should_continue(state: OrchestratorState):
     """
     Determines whether to continue to the next step or end.
+    Checks for errors and if we're on the last step.
     """
-    if state["current_step"] >= len(state["plan"]):
-        return "end"
-    return "execute_step"
-
-async def route_node(state):
-    last_result = state["results"][-1] if state["results"] else ""
-    if isinstance(last_result, str) and "'error'" in last_result:
-        return END  # ✅ this works now
-    return "CONTINUE"  # ✅ the key your node returns
+    # Check if there was an error in the last result
+    last_result = state["results"][-1] if state["results"] else {}
+    if isinstance(last_result, dict) and "error" in last_result:
+        return "END"
+    
+    # Check if we've completed all tasks
+    total_tasks = len(state["tasks"])
+    if state["current_step"] >= total_tasks:
+        return "END"
+    
+    return "CONTINUE"
 

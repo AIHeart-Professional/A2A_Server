@@ -10,3 +10,5 @@ requests
 langchain_openai
 graphviz
 ipython
+pymongo
+colorlog
