@@ -1,0 +1,52 @@
+character_structure:
+  character:
+    first_name: ""
+    last_name: ""
+    characters_name: ""
+    class: ""
+    cursor_color: ""
+    height: 0
+    physique: ""
+    age: 0
+    birthday: ""
+    bio: ""
+    level: 0
+    experience: 0
+    experience_to_next_level: 100
+  inventory:
+    equipment: []
+    consumables: []
+    misc: []
+    cratable: []
+    key_items: []
+    currency: 0
+  equipped:
+    head: null
+    chest: null
+    legs: null
+    arms: null
+    accessory1: null
+    accessory2: null
+    left_hand: null
+    right_hand: null
+  group:
+    guild: null
+    party: null
+  stats:
+    hp: 10
+    str: 8
+    def: 5
+    spe: 5
+    dex: 5
+    cha: 5
+    points_to_distribute: 2
+  combat:
+    status_ailment: null
+    battle_status: false
+    damage: 10
+    defense: 10
+    current_hp: 10
+  player:
+    user_id: null
+    server_id: null
+    active: false

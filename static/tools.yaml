@@ -7,20 +7,37 @@ tools:
         server_id: The unique identifier (UUID) of the server where the character is located.
         user_id: The unique identifier (UUID) of the user making the request.
 
+tools:
   - agent: character
     tool:
-      name: get_active_character
-      description: Validation, retrieves the currently active character's document.
+      name: check_for_active_character
+      description: Validation, Checks if there is an active character for the user on the server.
+      fields:
+        server_id: The unique identifier (UUID) of the server where the character is located.
+        user_id: The unique identifier (UUID) of the user making the request.
+
+  - agent: character
+    tool:
+      name: get_current_character
+      description: retrieves the currently active character's document.
       fields:
         user_id: The unique identifier (UUID) of the user whose active character is being checked.
         server_id: The unique identifier (UUID) of the server where the character is located.
   
   - agent: character
     tool:
+      name: get_player_character
+      description: retrieve a player character's document.
+      fields:
+        user_id: The unique identifier (UUID) of the user whose active character is being checked.
+        server_id: The unique identifier (UUID) of the server where the character is located.
+
+  - agent: character
+    tool:
       name: create_character
       prerequisite-tools:
         - check_character_limit
-        - get_active_character
+        - check_for_active_character
       required:
         - server_id
         - user_id       

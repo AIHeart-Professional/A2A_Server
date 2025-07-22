@@ -813,3 +813,180 @@
 2025-07-21 12:52:48,753 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
 2025-07-21 12:52:48,754 - INFO - character_tools.py - 29 - character_tools: Character Tool: Creating character with details: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
 2025-07-21 17:17:09,343 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 17:23:29,138 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 17:23:39,551 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 17:23:39,553 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 17:23:44,151 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 17:23:47,861 - INFO - character_tools.py - 20 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 17:24:59,034 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/get_active_character by calling character.
+2025-07-21 17:24:59,035 - INFO - app.py - 12 - app: Executing agent: character with action: get_active_character
+2025-07-21 17:24:59,036 - INFO - character.py - 11 - character: Character Agent: Performing action: get_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 17:24:59,036 - INFO - character_tools.py - 33 - character_tools: Character Tool: Getting active character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 17:24:59,037 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/create_character by calling character.
+2025-07-21 17:24:59,038 - INFO - app.py - 12 - app: Executing agent: character with action: create_character
+2025-07-21 17:24:59,038 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
+2025-07-21 17:24:59,038 - INFO - character_tools.py - 40 - character_tools: Character Tool: Creating character with details: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
+2025-07-21 18:08:51,539 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:08:58,209 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:12:57,331 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:13:03,649 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:44:04,595 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:44:11,103 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:44:42,098 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:44:48,648 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:46:54,605 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:47:01,353 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:47:01,491 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:47:08,058 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:47:21,522 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:47:27,810 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:49:13,790 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:49:20,235 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:49:56,506 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:50:02,917 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:50:59,917 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:51:06,573 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:51:06,713 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:51:13,111 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:55:59,285 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:56:05,852 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:56:10,062 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 18:56:10,063 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 18:56:17,638 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:56:17,639 - ERROR - character.py - 21 - character: An error occurred: cannot access local variable 'server_id' where it is not associated with a value
+2025-07-21 18:56:17,640 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: An error occurred: cannot access local variable 'server_id' where it is not associated with a value. Ending workflow.
+2025-07-21 18:56:32,469 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 18:56:32,470 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 18:56:32,470 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:56:34,642 - ERROR - character.py - 21 - character: An error occurred: cannot access local variable 'server_id' where it is not associated with a value
+2025-07-21 18:56:34,643 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: An error occurred: cannot access local variable 'server_id' where it is not associated with a value. Ending workflow.
+2025-07-21 18:57:02,775 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 18:57:09,761 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 18:57:11,532 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 18:57:11,532 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 18:57:11,760 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:11,760 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 18:57:11,794 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/get_active_character by calling character.
+2025-07-21 18:57:11,794 - INFO - app.py - 12 - app: Executing agent: character with action: get_active_character
+2025-07-21 18:57:11,794 - INFO - character.py - 11 - character: Character Agent: Performing action: get_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:11,795 - ERROR - character.py - 18 - character: Tool function not found for action: get_active_character
+2025-07-21 18:57:11,795 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: Tool function not found for action: get_active_character. Ending workflow.
+2025-07-21 18:57:28,772 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 18:57:28,772 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 18:57:28,773 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:28,774 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 18:57:28,776 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/get_player_character by calling character.
+2025-07-21 18:57:28,776 - INFO - app.py - 12 - app: Executing agent: character with action: get_player_character
+2025-07-21 18:57:28,777 - INFO - character.py - 11 - character: Character Agent: Performing action: get_player_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:28,777 - ERROR - character.py - 21 - character: An error occurred: cannot access local variable 'server_id' where it is not associated with a value
+2025-07-21 18:57:28,777 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: An error occurred: cannot access local variable 'server_id' where it is not associated with a value. Ending workflow.
+2025-07-21 18:57:45,465 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 18:57:45,466 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 18:57:45,466 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:45,467 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 18:57:45,468 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/get_current_character by calling character.
+2025-07-21 18:57:45,469 - INFO - app.py - 12 - app: Executing agent: character with action: get_current_character
+2025-07-21 18:57:45,469 - INFO - character.py - 11 - character: Character Agent: Performing action: get_current_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:45,469 - INFO - character_tools.py - 50 - character_tools: Character Tool: Getting the current character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 18:57:45,470 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: No active character found for this user on this server.. Ending workflow.
+2025-07-21 18:57:55,071 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 18:57:55,071 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 18:57:55,072 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:55,072 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 18:57:55,074 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_for_active_character by calling character.
+2025-07-21 18:57:55,074 - INFO - app.py - 12 - app: Executing agent: character with action: check_for_active_character
+2025-07-21 18:57:55,075 - INFO - character.py - 11 - character: Character Agent: Performing action: check_for_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 18:57:55,075 - INFO - character_tools.py - 38 - character_tools: Character Tool: Checking for active character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 18:57:55,076 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/create_character by calling character.
+2025-07-21 18:57:55,077 - INFO - app.py - 12 - app: Executing agent: character with action: create_character
+2025-07-21 18:57:55,077 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
+2025-07-21 19:00:30,320 - INFO - character_tools.py - 99 - character_tools: Character Tool: Created character with ID: 687ec68e87554d3173737069
+2025-07-21 19:00:30,322 - ERROR - character_tools.py - 102 - character_tools: Error creating character in database: name 'is_active' is not defined
+2025-07-21 19:00:30,322 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: Failed to create character: name 'is_active' is not defined. Ending workflow.
+2025-07-21 19:00:30,430 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 19:00:37,267 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 19:00:41,599 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 19:00:41,600 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 19:00:41,818 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 19:00:41,818 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 19:00:41,865 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_for_active_character by calling character.
+2025-07-21 19:00:41,865 - INFO - app.py - 12 - app: Executing agent: character with action: check_for_active_character
+2025-07-21 19:00:41,865 - INFO - character.py - 11 - character: Character Agent: Performing action: check_for_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 19:00:41,866 - INFO - character_tools.py - 38 - character_tools: Character Tool: Checking for active character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 19:00:41,867 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/create_character by calling character.
+2025-07-21 19:00:41,868 - INFO - app.py - 12 - app: Executing agent: character with action: create_character
+2025-07-21 19:00:41,868 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
+2025-07-21 19:01:55,765 - INFO - character_tools.py - 99 - character_tools: Character Tool: Created character with ID: 687ec6b768cc3e4f5235856a
+2025-07-21 19:01:59,289 - ERROR - character_tools.py - 102 - character_tools: Error creating character in database: name 'is_active' is not defined
+2025-07-21 19:08:51,019 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: Failed to create character: name 'is_active' is not defined. Ending workflow.
+2025-07-21 19:08:51,129 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 19:08:58,020 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 19:10:50,899 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 19:10:50,900 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 19:10:51,186 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 19:10:51,187 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 19:10:51,196 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_for_active_character by calling character.
+2025-07-21 19:10:51,197 - INFO - app.py - 12 - app: Executing agent: character with action: check_for_active_character
+2025-07-21 19:10:51,197 - INFO - character.py - 11 - character: Character Agent: Performing action: check_for_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 19:10:51,198 - INFO - character_tools.py - 38 - character_tools: Character Tool: Checking for active character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 19:10:51,200 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/create_character by calling character.
+2025-07-21 19:10:51,200 - INFO - app.py - 12 - app: Executing agent: character with action: create_character
+2025-07-21 19:10:51,201 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
+2025-07-21 19:10:56,013 - INFO - character_tools.py - 99 - character_tools: Character Tool: Created character with ID: 687ec8fe5774884ca0e3c526
+2025-07-21 19:11:35,136 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 19:11:35,137 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 19:11:35,137 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 19:11:35,138 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 19:11:35,141 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_for_active_character by calling character.
+2025-07-21 19:11:35,142 - INFO - app.py - 12 - app: Executing agent: character with action: check_for_active_character
+2025-07-21 19:11:35,142 - INFO - character.py - 11 - character: Character Agent: Performing action: check_for_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 19:11:35,143 - INFO - character_tools.py - 38 - character_tools: Character Tool: Checking for active character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 19:11:35,144 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/create_character by calling character.
+2025-07-21 19:11:35,144 - INFO - app.py - 12 - app: Executing agent: character with action: create_character
+2025-07-21 19:11:35,145 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'characters_name': 'leeroy', 'characters_class': 'warrior'}
+2025-07-21 19:11:38,601 - INFO - character_tools.py - 99 - character_tools: Character Tool: Created character with ID: 687ec92a5774884ca0e3c527
+2025-07-21 19:24:08,987 - ERROR - orchestrator.py - 89 - orchestrator: Invalid step format: {'tool': {'name': 'missing_fields', 'fields': {'missing': ['characters_class', 'server_id', 'user_id']}}}
+2025-07-21 19:24:31,670 - ERROR - orchestrator.py - 89 - orchestrator: Invalid step format: {'tool': {'name': 'missing_fields', 'fields': {'missing': ['server_id', 'user_id', 'characters_class']}}}
+2025-07-21 20:31:54,632 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/missing_fields by calling character.
+2025-07-21 20:31:54,633 - INFO - app.py - 12 - app: Executing agent: character with action: missing_fields
+2025-07-21 20:31:54,633 - INFO - character.py - 11 - character: Character Agent: Performing action: missing_fields with fields: {'missing_fields': ['characters_class', 'server_id', 'user_id']}
+2025-07-21 20:31:54,634 - ERROR - character.py - 18 - character: Tool function not found for action: missing_fields
+2025-07-21 20:31:54,634 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: Tool function not found for action: missing_fields. Ending workflow.
+2025-07-21 20:41:25,558 - INFO - api_server.py - 25 - api_server: Application shutdown...
+2025-07-21 20:41:32,780 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 20:43:20,714 - INFO - api_server.py - 20 - api_server: Application startup...
+2025-07-21 20:44:15,929 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 20:44:15,929 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 20:44:16,152 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 20:44:16,153 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 20:44:16,188 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_for_active_character by calling character.
+2025-07-21 20:44:16,188 - INFO - app.py - 12 - app: Executing agent: character with action: check_for_active_character
+2025-07-21 20:44:16,189 - INFO - character.py - 11 - character: Character Agent: Performing action: check_for_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 20:44:16,189 - INFO - character_tools.py - 38 - character_tools: Character Tool: Checking for active character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 20:44:16,191 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/create_character by calling character.
+2025-07-21 20:44:16,191 - INFO - app.py - 12 - app: Executing agent: character with action: create_character
+2025-07-21 20:44:16,192 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'characters_name': 'Leeroy', 'characters_class': 'warrior', 'user_id': '123e4567-e89b-12d3-a456-426614174000', 'server_id': '123e4567-e89b-12d3-a456-426614174111'}
+2025-07-21 20:44:22,205 - INFO - character_tools.py - 100 - character_tools: Character Tool: Created character with ID: 687edee6361a5c4a0ee3a813
+2025-07-21 20:44:33,567 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 20:44:33,567 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 20:44:33,568 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 20:44:33,568 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 20:44:33,570 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: Character limit exceeded for this user on this server.. Ending workflow.
+2025-07-21 20:44:47,417 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 20:44:47,418 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 20:44:47,418 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 20:44:47,419 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 20:44:47,420 - ERROR - orchestrator.py - 107 - orchestrator: Error occurred: Character limit exceeded for this user on this server.. Ending workflow.
+2025-07-21 20:45:35,252 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_character_limit by calling character.
+2025-07-21 20:45:35,252 - INFO - app.py - 12 - app: Executing agent: character with action: check_character_limit
+2025-07-21 20:45:35,252 - INFO - character.py - 11 - character: Character Agent: Performing action: check_character_limit with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 20:45:35,253 - INFO - character_tools.py - 22 - character_tools: Character Tool: Checking character limit for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 20:45:35,255 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/check_for_active_character by calling character.
+2025-07-21 20:45:35,255 - INFO - app.py - 12 - app: Executing agent: character with action: check_for_active_character
+2025-07-21 20:45:35,256 - INFO - character.py - 11 - character: Character Agent: Performing action: check_for_active_character with fields: {'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 20:45:35,256 - INFO - character_tools.py - 38 - character_tools: Character Tool: Checking for active character for server: 123e4567-e89b-12d3-a456-426614174111, user: 123e4567-e89b-12d3-a456-426614174000
+2025-07-21 20:45:35,258 - INFO - orchestrator.py - 94 - orchestrator: Executing step: character/create_character by calling character.
+2025-07-21 20:45:35,258 - INFO - app.py - 12 - app: Executing agent: character with action: create_character
+2025-07-21 20:45:35,258 - INFO - character.py - 11 - character: Character Agent: Performing action: create_character with fields: {'characters_name': 'Leeroy', 'characters_class': 'warrior', 'server_id': '123e4567-e89b-12d3-a456-426614174111', 'user_id': '123e4567-e89b-12d3-a456-426614174000'}
+2025-07-21 20:45:35,263 - INFO - character_tools.py - 100 - character_tools: Character Tool: Created character with ID: 687edf2f361a5c4a0ee3a814
+2025-07-21 21:43:01,829 - INFO - api_server.py - 25 - api_server: Application shutdown...
