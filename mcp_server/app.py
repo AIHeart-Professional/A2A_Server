@@ -5,6 +5,7 @@ from .validation import validate_request
 from cache.cache import cache
 import logging
 import asyncio
+import os
 import yaml
 
 async def execute_request(request: dict) -> dict:
@@ -62,10 +63,53 @@ async def execute_request(request: dict) -> dict:
     
     return result
 
-async def get_tools() -> str:
+async def get_tools(agents: dict, tools: dict) -> dict:
     """
-    Returns the entire tools.yaml file as a string.
+    For each agent, loads its YAML and checks if the specified tools exist.
+    Returns a dict mapping agent names to the tools found.
     """
-    with open('static/tools.yaml', 'r', encoding='utf-8') as f:
-        tools_str = f.read()
-    return tools_str
+    base_dir = "static"
+    result = {}
+    tool_names = list(tools.values()) # Get the list of tool names
+
+    for agent in agents.values(): # Iterate over the agent names (values of the dict)
+        agent_yaml_path = os.path.join(base_dir, agent, f"{agent}.yaml")
+        if not os.path.exists(agent_yaml_path):
+            result[agent] = {"error": f"YAML file not found: {agent_yaml_path}"}
+            continue
+
+        with open(agent_yaml_path, "r", encoding="utf-8") as f:
+            agent_yaml = yaml.safe_load(f)
+
+        # Tools are nested under a 'tools' key in the YAML
+        tools_dict = agent_yaml.get('tools', {}) if isinstance(agent_yaml, dict) else {}
+        available_tools = tools_dict.keys() if isinstance(tools_dict, dict) else []
+
+        # Collect the definitions of found tools
+        found_tool_definitions = {}
+        for tool_name in tool_names:
+            if tool_name in available_tools:
+                found_tool_definitions[tool_name] = tools_dict[tool_name]
+
+        missing_tools = [tool for tool in tool_names if tool not in found_tool_definitions]
+
+        # Format the found tools as a YAML string
+        found_tools_yaml_str = ""
+        if found_tool_definitions:
+            # The `allow_unicode=True` preserves the format, and indent adds readability
+            found_tools_yaml_str = yaml.dump(found_tool_definitions, allow_unicode=True, indent=2)
+
+        result[agent] = {
+            "found_tools": found_tools_yaml_str,
+            "missing_tools": missing_tools
+        }
+
+    return result
+
+async def get_intents() -> str:
+    """
+    Returns the entire intents.yaml file as a string.
+    """
+    with open('static/intents.yaml', 'r', encoding='utf-8') as f:
+        intents_str = f.read()
+    return intents_str

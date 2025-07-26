@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-from mcp_server.app import get_tools
+from mcp_server.app import get_tools, get_intents
+from typing import List
+from fastapi import Query
 from Orchestrator.app import execute_orchestrator
 import logging
 
@@ -30,22 +32,31 @@ class InitialRequest(BaseModel):
     user_query: str
     user_id: str
     server_id: str
-    
 class QueryRequest(BaseModel):
-    initial_request: InitialRequest
-    
+    initial_request: InitialRequest    
 class OrchestratorRequest(BaseModel):
     request: dict
     details: dict
+class ToolsRequest(BaseModel):
+    agents: Dict[str, Any]
+    tools: Dict[str, Any]
 
-# --- get tools Endpoints ---
-@app.get("/MCPServer/available_tools")
+@app.post("/MCPServer/available_tools")
+async def interpret_query(request: ToolsRequest):
+    """
+    API endpoint to interpret a user query using the MCP workflow.
+    """
+    response = await get_tools(request.agents, request.tools)
+    return response
+
+# --- get intents Endpoints ---
+@app.get("/MCPServer/available_intents")
 async def interpret_query():
     """
     API endpoint to interpret a user query using the MCP workflow.
     """
     # Route the request through the MCP interpreter
-    response = await get_tools()
+    response = await get_intents()
     return response
 
 # --- Orchestrator Endpoint ---
