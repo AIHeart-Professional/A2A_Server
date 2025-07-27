@@ -179,4 +179,90 @@ async def delete_character(fields: dict, context: dict) -> dict:
     except Exception as e:
         logging.error(f"Error deleting character from database: {e}")
         return {"error": f"Failed to delete character: {e}"}
+
+# Add stat points to distribute upon leveling up
+async def _add_points_to_distribute(new_character_data: dict, points_to_distribute: int) -> dict:
+    """
+    Add stat points to distribute upon leveling up.
+    """
+    # Step 1. combine original stat_points with points from level up
+    if "points_to_distribute" not in new_character_data["stats"]:
+        new_character_data["stats"]["points_to_distribute"] = 0
+    # Step 2. Add points to distribute
+    new_character_data["stats"]["points_to_distribute"] += points_to_distribute
+    # Step 3. Return the updated character data
+    logging.info(f"Character Tool: Added {points_to_distribute} points to distribute for character with ID: {new_character_data.get('_id')}")
+    return {"success": "Points to distribute added successfully!", "new_character_data": new_character_data}
+
+# Level up a character and update experience to next level
+async def _level_up(fields: dict, new_character_data: dict) -> dict:
+    """
+    Level up a character in the database.
+    """
+    # Step 1. Set character_data from get_character context
+    current_experience = new_character_data.get("character", {}).get("experience")
+    # Step 2. Get the next level's experience requirement
+    try:
+        # Find the first level where experience_required is greater than current experience
+        next_level_info = db.read_one(
+            "experience",
+            {"experience_required": {"$gt": current_experience}}
+        )
+        # 2a. If no next level found, return an error
+        if not next_level_info:
+            return {"error": "Could not find next level information. Max level may be reached."}
+        # Step 3. Extract the new level and experience required for the next level
+        new_level = next_level_info.get("level")
+        new_exp_to_next_level = next_level_info.get("experience_required")
+        points_to_distribute = next_level_info.get("points_to_distribute")
+        
+        # Step 4. Call _add_points_to_distribute to add points to distribute
+        logging.info(f"Character Tool: Leveling up character with ID: {new_character_data.get('_id')}")
+        new_character_data["character"] = _add_points_to_distribute(
+            new_character_data["character"],
+            points_to_distribute
+        )
+        # Step 4. Update the character data in memory as well
+        new_character_data["character"]["level"] = new_level
+        new_character_data["character"]["experience_to_next_level"] = new_exp_to_next_level
+        return {"success": "Character leveled up successfully!", "new_character_data": new_character_data}
+    except Exception as e:
+        logging.error(f"Error leveling up character in database: {e}")
+        return {"error": f"Failed to level up character: {e}"}
     
+# Add experience to a character
+# Fields: {"experience": int}, {experience_to_add: int}, {experience_to_next_level: int}
+async def _gain_experience(fields: dict, character_data: dict) -> dict:
+    """
+    Add experience to a character.
+    """
+    # Step 1. Set character_data from get_character context
+    character_id = ObjectId(character_data.get("_id"))
+    new_character_data = copy.deepcopy(character_data)
+    # Step 2. Get the amount of experience to add
+    experience_to_add = fields.get("experience_to_add", 0)
+    if not experience_to_add:
+        return {"error": "Experience amount is required."}
+    new_character_data["character.experience"] = character_data.get("character.experience") + experience_to_add
+    # Step 3. while character experience exceeds the next level threshold, level up the character
+    while new_character_data.get("character.experience") >= new_character_data.get("character.experience_to_next_level"):
+        logging.info(f"Character Tool: Leveling up character with ID: {character_id}")
+        await _level_up(fields, new_character_data)
+    logging.info(f"Character Tool: Adding {experience_to_add} experience to character with ID: {character_id}")
+    # Step 4. Call database to update character document
+    try:
+        modified_count = db.update_one(
+            "characters",
+            {"_id": character_id},
+            new_character_data 
+        )
+        # Step 4a. If modified_count is greater than 0, return success
+        if modified_count > 0:
+            logging.info(f"Character Tool: Added {experience_to_add} experience to character with ID: {character_id}")
+            return {"success": f"Added {experience_to_add} experience to character."}
+        # Step 4b. If modified_count is 0, return error
+        else:
+            return {"error": "No character found with the provided ID."}
+    except Exception as e:
+        logging.error(f"Error adding experience to character in database: {e}")
+        return {"error": f"Failed to add experience: {e}"}
