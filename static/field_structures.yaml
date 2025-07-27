@@ -3,7 +3,8 @@ character_structure:
     first_name: ""
     last_name: ""
     characters_name: ""
-    class: ""
+    characters_tag: ""
+    characters_class: ""
     cursor_color: ""
     height: 0
     physique: ""
