@@ -1,111 +1,37 @@
-# MCP_Tool_Only_Server MCP server
+# Agentic AI Demo (Evaluation Only)
 
-MCP server that only recognizes tools
+Welcome to the demo version of our Agentic AI application. This branch is provided **exclusively for evaluation and testing purposes**. It demonstrates the core functionality of our AI system in a limited, sandboxed form.
 
-## Components
+---
 
-### Resources
+## 🔍 What You Can Do
 
-The server implements a simple note storage system with:
-- Custom note:// URI scheme for accessing individual notes
-- Each note resource has a name, description and text/plain mimetype
+- ✅ Run and test the demo
+- ✅ View the code to understand how the system works
+- ✅ Share feedback or contact us with inquiries
 
-### Prompts
+---
 
-The server provides a single prompt:
-- summarize-notes: Creates summaries of all stored notes
-  - Optional "style" argument to control detail level (brief/detailed)
-  - Generates prompt combining all current notes with style preference
+## 🚫 What You Cannot Do
 
-### Tools
+- ❌ **Reuse** any part of this code in your own projects
+- ❌ **Modify or fork** this repository without express written permission
+- ❌ Use this code for **commercial**, **production**, or **research** purposes
 
-The server implements one tool:
-- add-note: Adds a new note to the server
-  - Takes "name" and "content" as required string arguments
-  - Updates server state and notifies clients of resource changes
+---
 
-## Configuration
+## 📄 License and Legal
 
-[TODO: Add configuration details specific to your implementation]
+This demo is **not open source**.
 
-## Quickstart
+All rights are reserved by the owner. By accessing this repository, you agree to use it **only for non-commercial, read-only evaluation**. Any unauthorized reproduction, redistribution, or commercial use is strictly prohibited.
 
-### Install
+To request usage rights, collaboration, or commercial licensing, please contact:
 
-#### Claude Desktop
+📧 [aiheartprofessional@gmail.com]
 
-On MacOS: `~/Library/Application\ Support/Claude/claude_desktop_config.json`
-On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+---
 
-<details>
-  <summary>Development/Unpublished Servers Configuration</summary>
-  ```
-  "mcpServers": {
-    "MCP_Tool_Only_Server": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "D:\Programming\git\MCP_Server_RP_Bot",
-        "run",
-        "MCP_Tool_Only_Server"
-      ]
-    }
-  }
-  ```
-</details>
+## 📦 Production Version
 
-<details>
-  <summary>Published Servers Configuration</summary>
-  ```
-  "mcpServers": {
-    "MCP_Tool_Only_Server": {
-      "command": "uvx",
-      "args": [
-        "MCP_Tool_Only_Server"
-      ]
-    }
-  }
-  ```
-</details>
-
-## Development
-
-### Building and Publishing
-
-To prepare the package for distribution:
-
-1. Sync dependencies and update lockfile:
-```bash
-uv sync
-```
-
-2. Build package distributions:
-```bash
-uv build
-```
-
-This will create source and wheel distributions in the `dist/` directory.
-
-3. Publish to PyPI:
-```bash
-uv publish
-```
-
-Note: You'll need to set PyPI credentials via environment variables or command flags:
-- Token: `--token` or `UV_PUBLISH_TOKEN`
-- Or username/password: `--username`/`UV_PUBLISH_USERNAME` and `--password`/`UV_PUBLISH_PASSWORD`
-
-### Debugging
-
-Since MCP servers run over stdio, debugging can be challenging. For the best debugging
-experience, we strongly recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
-
-
-You can launch the MCP Inspector via [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) with this command:
-
-```bash
-npx @modelcontextprotocol/inspector uv --directory D:\Programming\git\MCP_Server_RP_Bot run mcp-tool-only-server
-```
-
-
-Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging.
+This demo does not represent the full capabilities of the production system. If you're interested in the full application, integrations, or enterprise use, reach out directly to us.

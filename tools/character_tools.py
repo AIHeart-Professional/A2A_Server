@@ -23,7 +23,7 @@ async def check_character_limit(fields: dict, context: dict) -> dict:
     user_id = fields.get("user_id")
     logging.info(f"Character Tool: Checking character limit for server: {server_id}, user: {user_id}")
     query = {"server_id": server_id, "user_id": user_id}
-    characters = db.read_many("characters", query)
+    characters = await db.read_many("characters", query)
     # No characters found for player
     if not characters:
         return {"success": "No characters found for this user on this server.", "characters": []}    
@@ -44,7 +44,7 @@ async def character_name_available(fields: dict, context: dict) -> dict:
     character_tag = fields.get("character_tag")
     logging.info(f"Character Tool: Checking character name availability for server: {server_id}, character: {character_name}")
     query = {"player.server_id": server_id, "character.characters_name": character_name, "character.characters_tag": character_tag}
-    characters = db.read_many("characters", query)
+    characters = await db.read_many("characters", query)
     # No characters found with the same name
     if not characters:
         return {"success": "Character name is available.", "character_name_available": True}    
@@ -78,7 +78,7 @@ async def get_character(fields: dict, context: dict) -> dict:
         return {"error": "At least one field (server_id, user_id, character_name, active) is required."}
     # Call database to get character document
     try:
-        character = db.read_one("characters", query)
+        character = await db.read_one("characters", query)
         if not character:
             return {"error": "No character found matching the criteria."}
         return {"success": f"Found character on server {fields['server_id']}", "characters": character}
@@ -109,7 +109,7 @@ async def create_character(fields: dict, context: dict) -> dict:
         character_template["player"]["active"] = True
     # 3. Create the character in the database
     try:
-        new_char_id = db.create("characters", character_template)
+        new_char_id = await db.create("characters", character_template)
         logging.info(f"Character Tool: Created character with ID: {new_char_id}")
         return {"success": "Character created successfully!"}
     except Exception as e:
@@ -144,7 +144,7 @@ async def update_character(fields: dict, context: dict) -> dict:
     # Call database to update character document
     try:
         # Use the MongoDB record _id and set the character object to new_character_data
-        modified_count = db.update_one(
+        modified_count = await db.update_one(
             "characters",  # Collection name
             {"_id": character_id},  # Query to find the document
             new_character_data  # Update data (without $set)
@@ -170,7 +170,7 @@ async def delete_character(fields: dict, context: dict) -> dict:
         return {"error": "No character id found in context."}
     # Call database to delete character document
     try:
-        deleted_count = db.delete_one("characters", {"_id": character_id})
+        deleted_count = await db.delete_one("characters", {"_id": character_id})
         if deleted_count > 0:
             logging.info(f"Character Tool: Deleted character with ID: {character_id}")
             return {"success": "Character deleted successfully!"}
@@ -179,7 +179,41 @@ async def delete_character(fields: dict, context: dict) -> dict:
     except Exception as e:
         logging.error(f"Error deleting character from database: {e}")
         return {"error": f"Failed to delete character: {e}"}
-
+    
+# Inventory
+# Get the inventory of a character
+async def get_inventory(fields: dict, context: dict) -> dict:
+    """
+    Get the inventory of a character.
+    """
+    query = {}
+    
+    # Map API-friendly names to database field names from the character structure
+    # Get server
+    if "server_id" in fields:
+        query["player.server_id"] = fields["server_id"]
+    # get active character for player
+    if "user_id" in fields and "active" in fields:
+        query["player.user_id"] = fields["user_id"]
+        query["player.active"] = fields["active"]
+        logging.info(f"Character Tool: Getting currently active character: {query}")
+    # get other characters
+    if "character_name" in fields and "character_tag" in fields:
+        query["character.characters_name"] = fields["character_name"]
+        query["character.characters_tag"] = fields["character_tag"]
+        logging.info(f"Character Tool: Getting other players character: {query}")
+    # If required fields are missing, return an error
+    if not query:
+        return {"error": "At least one field (server_id, user_id, character_name, active) is required."}
+    # Call database to get character document
+    try:
+        inventory_data = await db.read_one("characters", query, {"inventory": 1, "_id": 0})
+        if not inventory_data or "inventory" not in inventory_data:
+            return {"error": "No inventory found for this character."}
+        return {"success": "Inventory found.", "inventory": inventory_data["inventory"]}
+    except Exception as e:
+        logging.error(f"Error retrieving character from database: {e}")
+        return {"error": f"Failed to retrieve character: {e}"}
 # Add stat points to distribute upon leveling up
 async def _add_points_to_distribute(new_character_data: dict, points_to_distribute: int) -> dict:
     """
@@ -204,7 +238,7 @@ async def _level_up(fields: dict, new_character_data: dict) -> dict:
     # Step 2. Get the next level's experience requirement
     try:
         # Find the first level where experience_required is greater than current experience
-        next_level_info = db.read_one(
+        next_level_info = await db.read_one(
             "experience",
             {"experience_required": {"$gt": current_experience}}
         )
@@ -218,10 +252,11 @@ async def _level_up(fields: dict, new_character_data: dict) -> dict:
         
         # Step 4. Call _add_points_to_distribute to add points to distribute
         logging.info(f"Character Tool: Leveling up character with ID: {new_character_data.get('_id')}")
-        new_character_data["character"] = _add_points_to_distribute(
+        add_points_result = await _add_points_to_distribute(
             new_character_data["character"],
             points_to_distribute
         )
+        new_character_data["character"] = add_points_result["new_character_data"]
         # Step 4. Update the character data in memory as well
         new_character_data["character"]["level"] = new_level
         new_character_data["character"]["experience_to_next_level"] = new_exp_to_next_level
@@ -247,11 +282,13 @@ async def _gain_experience(fields: dict, character_data: dict) -> dict:
     # Step 3. while character experience exceeds the next level threshold, level up the character
     while new_character_data.get("character.experience") >= new_character_data.get("character.experience_to_next_level"):
         logging.info(f"Character Tool: Leveling up character with ID: {character_id}")
-        await _level_up(fields, new_character_data)
+        level_up_result = await _level_up(fields, new_character_data)
+        if "new_character_data" in level_up_result:
+            new_character_data = level_up_result["new_character_data"]
     logging.info(f"Character Tool: Adding {experience_to_add} experience to character with ID: {character_id}")
     # Step 4. Call database to update character document
     try:
-        modified_count = db.update_one(
+        modified_count = await db.update_one(
             "characters",
             {"_id": character_id},
             new_character_data 
