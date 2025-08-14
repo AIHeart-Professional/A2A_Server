@@ -7,8 +7,12 @@ pyyaml
 langgraph
 langchain
 requests
-langchain_openai
+langchain-community
+langchain-google-genai
 graphviz
 ipython
 pymongo
 colorlog
+a2a-sdk
+a2a
+google-adk
