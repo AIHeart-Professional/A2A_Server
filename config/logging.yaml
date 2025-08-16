@@ -16,6 +16,8 @@ formatters:
       WARNING:  'yellow'
       ERROR:    'red'
       CRITICAL: 'red,bg_white'
+  agent_display:
+    format: '%(message)s'
 
 handlers:
   console:
@@ -33,10 +35,21 @@ handlers:
     backupCount: 5
     encoding: utf8
 
+  agent_console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: agent_display
+    stream: ext://sys.stdout
+
 loggers:
   my_project:
     level: DEBUG
     handlers: [console, file]
+    propagate: no
+  
+  agent:
+    level: INFO
+    handlers: [agent_console, file]
     propagate: no
 
 root:

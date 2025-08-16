@@ -9,20 +9,38 @@ async def execute_agent(request: dict) -> dict:
     This keeps a stable, static entry that routes all agent handling to
     `Agents.Veritas_Agent.app.execute_agent`.
     """
+    print(f"[DEBUG] execute_agent called with request keys: {list(request.keys())}")
+    
     # Extract user_id and message from request
     user_id = request.get("request").get("user_info").get("user_id")
     message = request.get("request").get("user_query")
     
+    print(f"[DEBUG] Extracted user_id: {user_id}, message: {message[:50]}...")
+    
     # Create executor with the root agent
     executor = AgentExecutor(root_agent, "Veritas_Agent")
+    print(f"[DEBUG] Created executor: {executor}")
     
-    # Initialize session
-    execution_id = await executor.init(user_id)
+    # Initialize session - this stores the execution_id in executor._sessions
+    print(f"[DEBUG] Calling executor.init({user_id})")
+    try:
+        execution_id = await executor.init(user_id)
+        print(f"[DEBUG] Got execution_id: {execution_id}")
+    except Exception as e:
+        print(f"[DEBUG] EXCEPTION in executor.init: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise
     
     # Execute and collect all events with error handling
+    # IMPORTANT: Use the same executor instance that has the session stored
+    print(f"[DEBUG] Starting executor.execute({execution_id}, {message[:30]}...)")
     try:
         events = []
+        print(f"[DEBUG] About to iterate over executor.execute()")
+        print(f"[DEBUG] Executor sessions: {executor._sessions}")
         async for event in executor.execute(execution_id, message, stream=True):
+            print(f"[DEBUG] Got event: {type(event)}")
             events.append(event)
         
         # Return the final event or a summary
@@ -56,12 +74,16 @@ async def execute_agent(request: dict) -> dict:
                 "execution_id": execution_id
             }
     except asyncio.TimeoutError:
+        print(f"[DEBUG] TimeoutError in execute_agent")
         return {
             "status": "error",
             "response": "Agent execution timed out after 30 seconds",
             "execution_id": execution_id
         }
     except Exception as e:
+        print(f"[DEBUG] Exception in execute_agent: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return {
             "status": "error",
             "response": f"Agent execution failed: {str(e)}",
@@ -82,7 +104,7 @@ async def execute_agent_stream(request: dict):
     # Create executor with the root agent
     executor = AgentExecutor(root_agent, "Veritas_Agent")
     
-    # Initialize session
+    # Initialize session - this stores the execution_id in executor._sessions
     execution_id = await executor.init(user_id)
     
     # Yield initial status
@@ -101,17 +123,19 @@ async def execute_agent_stream(request: dict):
                 if hasattr(event.content, 'parts') and event.content.parts:
                     text_parts = []
                     for part in event.content.parts:
+                        # Only include text parts, skip function calls
                         if hasattr(part, 'text') and part.text:
                             text_parts.append(part.text.strip())
                     event_text = " ".join(text_parts)
             
-            # Yield agent event
-            yield {
-                'type': 'agent_event',
-                'content': event_text or str(event),
-                'execution_id': execution_id,
-                'timestamp': asyncio.get_event_loop().time()
-            }
+            # Only yield events with actual text content (skip function calls and internal events)
+            if event_text:
+                yield {
+                    'type': 'agent_event',
+                    'content': event_text,
+                    'execution_id': execution_id,
+                    'timestamp': asyncio.get_event_loop().time()
+                }
             
             # Check if this is the final response
             if hasattr(event, 'is_final_response') and event.is_final_response():

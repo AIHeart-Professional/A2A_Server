@@ -13,6 +13,7 @@ graphviz
 ipython
 pymongo
 colorlog
+colorama
 a2a-sdk
 a2a
 google-adk

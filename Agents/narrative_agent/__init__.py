@@ -1,5 +1,6 @@
 import logging
 from typing import Dict, Any
+from .agent import create_app
 
 logger = logging.getLogger(__name__)
 
@@ -20,3 +21,6 @@ async def run_agent(action: str, fields: Dict[str, Any], context: Dict[str, Any]
     except Exception as e:
         logger.exception("narrative_agent error")
         return {"error": str(e)}
+
+# Export create_app for uvicorn
+__all__ = ['run_agent', 'create_app']

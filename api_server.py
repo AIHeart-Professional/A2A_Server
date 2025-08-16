@@ -115,7 +115,6 @@ async def handle_request(request: HandleRequest) -> dict:
     """
     API endpoint to retrieve agents to use based on the user query and intents.
     """
-    logging.info(f"Received request: {request.model_dump()}")
     result = await execute_agent(request.model_dump())
     return result
 

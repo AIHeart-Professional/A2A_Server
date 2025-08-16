@@ -4,6 +4,7 @@ from a2a.types import (
     AgentCard,
     AgentSkill,
 )
+from starlette.responses import JSONResponse
 # This file defines the agent card for the Narrative Agent
 
 compose_scene_skill = AgentSkill(
@@ -22,14 +23,16 @@ summarize_events_skill = AgentSkill(
     examples=["Summarize what happened in the last quest.", "Give me a recap of the battle."],
 )
 
-agent_card = AgentCard(
-    id="narrative_agent",
-    name="Narrative Agent",
-    description="An agent that composes and summarizes narrative content.",
-    url="http://localhost:8001/Agent/narrative_agent",
-    version="1.0.0",
-    defaultInputModes=["text", "text/plain"],
-    defaultOutputModes=["text", "text/plain"],
-    capabilities=AgentCapabilities(streaming=True, pushNotifications=True),
-    skills=[compose_scene_skill, summarize_events_skill],
-)
+async def agent_card(request):
+    card = AgentCard(
+        id="narrative_agent",
+        name="Narrative Agent",
+        description="An agent that responds to the request of I want to go fishing.",
+        url="http://localhost:8001/Agent/narrative_agent",
+        version="1.0.0",
+        defaultInputModes=["text", "text/plain"],
+        defaultOutputModes=["text", "text/plain"],
+        capabilities=AgentCapabilities(streaming=True, pushNotifications=True),
+        skills=[compose_scene_skill, summarize_events_skill],
+    )
+    return JSONResponse(card.dict())
