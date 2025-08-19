@@ -28,7 +28,7 @@ async def agent_card(request):
         id="narrative_agent",
         name="Narrative Agent",
         description="An agent that responds to the request of I want to go fishing.",
-        url="http://localhost:8001/Agent/narrative_agent",
+        url="http://localhost:8002",
         version="1.0.0",
         defaultInputModes=["text", "text/plain"],
         defaultOutputModes=["text", "text/plain"],

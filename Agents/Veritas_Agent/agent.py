@@ -29,7 +29,7 @@ def veritas_agent():
         model="gemini-2.0-flash",
         description="Agent designed as a parent agent whose purpose is to delegate tasks to other agents.",
         instruction="You are a parent agent that immediately delegates all user requests to your sub-agent.",
-        sub_agents=[agent_delegator_sub_agent]
+        sub_agents=[agent_delegator_sub_agent],
     )
     
 root_agent = veritas_agent()

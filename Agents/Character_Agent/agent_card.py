@@ -4,6 +4,8 @@ from a2a.types import (
     AgentCard,
     AgentSkill,
 )
+from starlette.responses import JSONResponse
+
 # This file defines the agent card for the Character Agent
 
 creating_character_skill = AgentSkill(
@@ -22,15 +24,16 @@ view_character_skill = AgentSkill(
     examples=["View the character named Gandalf.", "show me the character with blue hair named leeroy."],
 )
 
-agent_card = AgentCard(
-    id = "character_agent",
-    name="Character",
-    description="An agent that interacts with characters.",
-    url="http://localhost:8001/Agent/character_agent",
-    version="1.0.0",
-    defaultInputModes=["text", "text/plain"],
-    defaultOutputModes=["text", "text/plain"],
-    capabilities = AgentCapabilities(streaming=True, pushNotifications=True),
-    skills=[creating_character_skill, view_character_skill],
-
-)
+async def agent_card(request):
+    card = AgentCard(
+        id = "character_agent",
+        name="Character",
+        description="An agent that interacts with characters.",
+        url="http://localhost:8002",
+        version="1.0.0",
+        defaultInputModes=["text", "text/plain"],
+        defaultOutputModes=["text", "text/plain"],
+        capabilities = AgentCapabilities(streaming=True, pushNotifications=True),
+        skills=[creating_character_skill, view_character_skill],
+    )
+    return JSONResponse(card.model_dump())

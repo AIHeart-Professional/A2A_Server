@@ -1,6 +1,7 @@
 import asyncio
 import aiohttp
 import logging
+import uuid
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 
@@ -100,14 +101,22 @@ class A2AAgentDiscovery:
     
     async def call_agent_skill(self, agent_info: AgentInfo, skill_id: str, request_data: Dict) -> Dict:
         """Call a specific skill on an A2A agent"""
-        # For A2A agents created with to_a2a(), the endpoint is just the base URL
+        # For A2A agents created with to_a2a(), we need to call the /tasks endpoint
         url = agent_info.url.rstrip('/')
         
-        # A2A agents expect the message in the request body directly
+        # A2A agents expect a SendMessageRequest format
+        message_text = request_data.get("task", request_data.get("user_query", ""))
         payload = {
-            "message": request_data.get("task", request_data.get("user_query", "")),
-            "user_id": "user",
-            "session_id": "default_session"
+            "id": str(uuid.uuid4()),
+            "params": {
+                "message": {
+                    "messageId": str(uuid.uuid4()),
+                    "role": "user",
+                    "parts": [{"text": message_text}]
+                },
+                "user_id": "user",
+                "session_id": "default_session"
+            }
         }
         
         logger.info(f"Calling A2A agent at {url} with payload: {payload}")

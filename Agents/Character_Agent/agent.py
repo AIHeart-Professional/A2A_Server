@@ -1,12 +1,11 @@
 import logging
 import os
 import sys
-
+from starlette.routing import Route
 # ADK imports
 from google.adk.agents import Agent
-from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
-from a2a.utils.constants import AGENT_CARD_WELL_KNOWN_PATH
+from .agent_card import agent_card
 
 # Configure API credentials
 os.environ["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY", "")
@@ -25,15 +24,55 @@ from mcp_server.Tools.Character.adk_tool import (
 )
 
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-a2a_app = to_a2a(remote, port=8001)  # serve with uvicorn
+def create_app():
+    try:
+        # Construct the agent
+        root_agent = character_agent()
+        
+        logger.info("Agent created successfully")
+        
+        # Create the A2A app for direct usage
+        app = to_a2a(root_agent, host="127.0.0.1", port=8002)
+        
+        logger.info("A2A app created")
+        
+        # Add our custom agent card route to override the default
+        app.routes.append(Route("/.well-known/agent", agent_card, methods=["GET", "POST"]))
+
+        
+        logger.info("A2A app created")
+        
+        # Add our custom agent card route to override the default
+        app.routes.append(Route("/.well-known/agent", agent_card, methods=["GET", "POST"]))
+
+        logger.info("A2A app created with custom agent card route")
+        
+        # Add middleware to log all requests
+        @app.middleware("http")
+        async def log_requests(request, call_next):
+            logger.info(f"Received request: {request.method} {request.url}")
+            try:
+                response = await call_next(request)
+                logger.info(f"Response status: {response.status_code}")
+                return response
+            except Exception as e:
+                logger.error(f"Request processing error: {e}")
+                raise
+        
+        return app
+        
+    except Exception as e:
+        logger.error(f"Error creating app: {e}")
+        raise
 
 character_handler_sub_agent = Agent(
     name="character_handler_sub_agent",
     model="gemini-1.5-flash",
     description="Agent designed to handle character interactions for a roleplaying game.",
     instruction="You are an expert at managing characters for a roleplaying game. You can help with things such as editing character information, creating characters, and deleting characters.",
-    tools=[create_character_tool, update_character_tool, get_character_tool, delete_character_tool]
+    tools=[create_character_tool, update_character_tool, get_character_tool, delete_character_tool],
 )
 def character_agent():
     return Agent(
@@ -41,7 +80,5 @@ def character_agent():
         model="gemini-1.5-flash",
         description="Agent designed to interact with players characters",
         instruction="You are an expert at managing characters for a roleplaying game. Your role is to only call out to required sub-agents to handle the work.",
-        sub_agents=[character_handler_sub_agent]
+        sub_agents=[character_handler_sub_agent],
     )
-
-root_agent = character_agent()
