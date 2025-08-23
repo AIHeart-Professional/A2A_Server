@@ -69,18 +69,18 @@ class Database:
 #
 # # Create
 # new_char_id = db.create("characters", {"name": "Gandalf", "level": 99})
-# print(f"Created character with ID: {new_char_id}")
+# logger.info(f"Created character with ID: {new_char_id}")
 #
 # # Read
 # character = db.read_one("characters", {"name": "Gandalf"})
-# print(f"Read character: {character}")
+# logger.info(f"Read character: {character}")
 #
 # # Update
 # updated_count = db.update_one("characters", {"_id": ObjectId(new_char_id)}, {"level": 100})
-# print(f"Updated {updated_count} character(s).")
+# logger.info(f"Updated {updated_count} character(s).")
 #
 # # Delete
 # deleted_count = db.delete_one("characters", {"name": "Gandalf"})
-# print(f"Deleted {deleted_count} character(s).")
+# logger.info(f"Deleted {deleted_count} character(s).")
 #
 # db.close()

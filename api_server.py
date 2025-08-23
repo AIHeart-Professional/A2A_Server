@@ -9,6 +9,7 @@ from Orchestrator.app import execute_orchestrator
 from A2A_Server.app import get_agent_card_info, instructions
 from LLM.app import agent_to_use
 from Agents.app import execute_agent, execute_agent_stream
+from utils.context_logger import context_logger
 import logging
 import json
 import time
@@ -106,7 +107,7 @@ async def get_agents_to_use(request: AgentsToUseRequest) -> dict:
     """
     API endpoint to retrieve agents to use based on the user query and intents.
     """
-    logging.info(f"Received request: {request.model_dump()}")
+    logging.info(f"Received request")
     result = await agent_to_use(request.model_dump())
     return result
 
@@ -115,6 +116,12 @@ async def handle_request(request: HandleRequest) -> dict:
     """
     API endpoint to retrieve agents to use based on the user query and intents.
     """
+    # Extract user info for logging
+    user_id = request.request.get('user_id', 'unknown')
+    message = str(request.request.get('user_query', 'no message'))
+    
+    context_logger.log_api_request(user_id, message, "/A2A/handle_request")
+    
     result = await execute_agent(request.model_dump())
     return result
 
@@ -124,6 +131,11 @@ async def handle_request_stream(request: HandleRequest):
     Streaming API endpoint that shows real-time agent processing flow.
     Returns Server-Sent Events (SSE) for live updates.
     """
+    # Extract user info for logging
+    user_id = request.request.get('user_id', 'unknown')
+    message = str(request.request.get('user_query', 'no message'))
+    
+    context_logger.log_api_request(user_id, message, "/A2A/handle_request_stream")
     
     async def event_stream():
         try:

@@ -1,5 +1,5 @@
 from google.adk.agents import Agent
-from .delegation_tools import discover_available_agents, delegate_to_agent, call_specific_agent
+from ..delegation_tools import discover_available_agents, delegate_to_agent, call_specific_agent
 
 agent_delegator_sub_agent = Agent(
     name="agent_delegator_sub_agent",

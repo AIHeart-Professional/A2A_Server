@@ -5,6 +5,10 @@ import sys
 import os
 from pymongo import MongoClient
 from bson import ObjectId
+import logging
+from config.logging_config import setup_logging
+setup_logging()
+logger = logging.getLogger(__name__)
 
 # MongoDB configuration
 MONGO_URI = "mongodb://localhost:27017/"
@@ -450,7 +454,7 @@ def delete_character_tool(
         
         # Validate that at least one identifier is provided
         if not character_name and not character_id:
-            print("No character name or ID provided")
+            logger.info("No character name or ID provided")
             return {
                 "success": False,
                 "error": "Either character_name or character_id must be provided"
@@ -470,22 +474,22 @@ def delete_character_tool(
                 
         # Delete the character
         result = characters_collection.delete_one(query)
-        print("result: ", result)
+        logger.info("result: ", result)
         if result.deleted_count == 0:
-            print("Failed to delete character")
+            logger.info("Failed to delete character")
             return {
                 "success": False,
                 "error": "Failed to delete character"
             }
         
-        print("Character deleted successfully")
+        logger.info("Character deleted successfully")
         return {
             "success": True,
             "message": f"Character '{character_name}' deleted successfully"
         }
         
     except Exception as e:
-        print(f"Failed to delete character: {str(e)}")
+        logger.info(f"Failed to delete character: {str(e)}")
         return {
             "success": False,
             "error": f"Failed to delete character: {str(e)}"

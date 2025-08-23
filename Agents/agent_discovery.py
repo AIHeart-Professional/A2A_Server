@@ -48,7 +48,7 @@ class A2AAgentDiscovery:
             async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
-                    logger.info(f"Agent card received from port {port}: {data}")
+                    logger.info(f"Agent card received from port {port}: {data['name']}")
                     return AgentInfo(
                         name=data.get("name", f"agent_port_{port}"),
                         description=data.get("description", ""),
@@ -118,14 +118,11 @@ class A2AAgentDiscovery:
                 "session_id": "default_session"
             }
         }
-        
-        logger.info(f"Calling A2A agent at {url} with payload: {payload}")
-        
+                
         async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as session:
             try:
                 async with session.post(url, json=payload) as response:
                     response_text = await response.text()
-                    logger.info(f"Agent response status: {response.status}, body: {response_text}")
                     
                     if response.status == 200:
                         try:

@@ -24,7 +24,6 @@ if not os.environ["GOOGLE_API_KEY"]:
         "GOOGLE_API_KEY is not set. Ensure it is present in your environment or .env file."
     )
 # Alternatively, you can use Vertex AI
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "path/to/credentials.json"
 from mcp_server.Tools.Character.adk_tool import (
     create_character_tool,
     update_character_tool,
@@ -38,7 +37,7 @@ logger = logging.getLogger(__name__)
 def create_app():
     try:
         # Construct the agent
-        root_agent = character_agent()
+        root_agent = mechanics_agent()
         
         logger.info("Agent created successfully")
         
@@ -61,7 +60,7 @@ def create_app():
         # Add middleware to log all requests
         @app.middleware("http")
         async def log_requests(request, call_next):
-            logger.info(f"Received request.")
+            logger.info(f"Received request: {request.method} {request.url}")
             try:
                 response = await call_next(request)
                 logger.info(f"Response status: {response.status_code}")
@@ -76,18 +75,18 @@ def create_app():
         logger.error(f"Error creating app: {e}")
         raise
 
-character_handler_sub_agent = Agent(
-    name="character_handler_sub_agent",
+character_sub_agent = Agent(
+    name="character_sub_agent",
     model="gemini-1.5-flash",
     description="Agent designed to handle character interactions for a roleplaying game.",
     instruction="You are an expert at managing characters for a roleplaying game. You can help with things such as editing character information, creating characters, and deleting characters.",
     tools=[create_character_tool, update_character_tool, get_character_tool, delete_character_tool],
 )
-def character_agent():
+def mechanics_agent():
     return Agent(
-        name="character_agent",
+        name="mechanics_agent",
         model="gemini-1.5-flash",
         description="Agent designed to interact with players characters",
-        instruction="You are an expert at managing characters for a roleplaying game. Your role is to only call out to required sub-agents to handle the work.",
-        sub_agents=[character_handler_sub_agent],
+        instruction="You are an expert at game mechanics. You can help with things such as characters, items, and other game mechanics.",
+        sub_agents=[character_sub_agent],
     )

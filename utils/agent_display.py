@@ -132,16 +132,15 @@ class AgentLogger:
     def start_execution(self, user_id: str, execution_id: str, message: str):
         """Log execution start."""
         header = self.formatter.format_header(self.agent_name, user_id, execution_id)
-        print(header)
-        
+        self.logger.info(header)
         # Log initial message
         step = self.formatter.format_step('info', f'Processing: "{message[:100]}..."')
-        print(step)
+        self.logger.info(step)
         
     def log_step(self, step_type: str, content: str, details: Optional[Dict] = None):
         """Log execution step."""
         step = self.formatter.format_step(step_type, content, details)
-        print(step)
+        self.logger.info(step)
         
     def log_tool_call(self, tool_name: str, parameters: Dict):
         """Log tool call."""
@@ -161,12 +160,12 @@ class AgentLogger:
     def complete_execution(self, final_response: str, total_time: Optional[float] = None):
         """Log execution completion."""
         completion = self.formatter.format_completion(final_response, total_time)
-        print(completion)
+        self.logger.info(completion)
         
     def error_execution(self, error_msg: str, error_type: str = "Unknown"):
         """Log execution error."""
         error = self.formatter.format_error(error_msg, error_type)
-        print(error)
+        self.logger.info(error)
 
 def create_agent_logger(agent_name: str) -> AgentLogger:
     """Factory function to create agent logger."""

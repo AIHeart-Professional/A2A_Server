@@ -17,3 +17,7 @@ colorama
 a2a-sdk
 a2a
 google-adk
+python-dotenv
+sentence-transformers
+tiktoken
+numpy

@@ -1,7 +1,12 @@
 import asyncio
+import logging
+from uuid import uuid4
 from Agents.Veritas_Agent.agent_executor import AgentExecutor
 from Agents.Veritas_Agent.agent import root_agent
+from config.logging_config import setup_logging
 
+setup_logging()
+logger = logging.getLogger(__name__)
 
 async def execute_agent(request: dict) -> dict:
     """Entry after API call: always delegate to Veritas parent agent.
@@ -9,38 +14,41 @@ async def execute_agent(request: dict) -> dict:
     This keeps a stable, static entry that routes all agent handling to
     `Agents.Veritas_Agent.app.execute_agent`.
     """
-    print(f"[DEBUG] execute_agent called with request keys: {list(request.keys())}")
+    logger.info(f"execute_agent called with request keys: {list(request.keys())}")
     
-    # Extract user_id and message from request
-    user_id = request.get("request").get("user_info").get("user_id")
+    # Extract user_id, character_id, server_id and message from request
+    user_info = request.get("request").get("user_info", {})
+    user_id = user_info.get("user_id")
+    character_id = user_info.get("character_id")
+    server_id = user_info.get("server_id")
     message = request.get("request").get("user_query")
     
-    print(f"[DEBUG] Extracted user_id: {user_id}, message: {message[:50]}...")
+    logger.info(f"Extracted user_id: {user_id}, character_id: {character_id}, server_id: {server_id}, message: {message[:50]}...")
     
     # Create executor with the root agent
     executor = AgentExecutor(root_agent, "Veritas_Agent")
-    print(f"[DEBUG] Created executor: {executor}")
+    logger.info(f"Created executor: {executor}")
     
     # Initialize session - this stores the execution_id in executor._sessions
-    print(f"[DEBUG] Calling executor.init({user_id})")
+    logger.info(f"Calling executor.init({user_id}, character_id={character_id}, server_id={server_id})")
     try:
-        execution_id = await executor.init(user_id)
-        print(f"[DEBUG] Got execution_id: {execution_id}")
+        execution_id = await executor.init(user_id, character_id=character_id, server_id=server_id)
+        logger.info(f"Got execution_id: {execution_id}")
     except Exception as e:
-        print(f"[DEBUG] EXCEPTION in executor.init: {type(e).__name__}: {str(e)}")
+        logger.error(f"EXCEPTION in executor.init: {type(e).__name__}: {str(e)}")
         import traceback
         traceback.print_exc()
         raise
     
     # Execute and collect all events with error handling
     # IMPORTANT: Use the same executor instance that has the session stored
-    print(f"[DEBUG] Starting executor.execute({execution_id}, {message[:30]}...)")
+    logger.info(f"Starting executor.execute({execution_id}, {message[:30]}...)")
     try:
         events = []
-        print(f"[DEBUG] About to iterate over executor.execute()")
-        print(f"[DEBUG] Executor sessions: {executor._sessions}")
+        logger.info(f"About to iterate over executor.execute()")
+        logger.info(f"Executor sessions: {executor._sessions}")
         async for event in executor.execute(execution_id, message, stream=True):
-            print(f"[DEBUG] Got event: {type(event)}")
+            logger.info(f"Got event: {type(event)}")
             events.append(event)
         
         # Return the final event or a summary
@@ -74,14 +82,14 @@ async def execute_agent(request: dict) -> dict:
                 "execution_id": execution_id
             }
     except asyncio.TimeoutError:
-        print(f"[DEBUG] TimeoutError in execute_agent")
+        logger.error(f"TimeoutError in execute_agent")
         return {
             "status": "error",
             "response": "Agent execution timed out after 30 seconds",
             "execution_id": execution_id
         }
     except Exception as e:
-        print(f"[DEBUG] Exception in execute_agent: {type(e).__name__}: {str(e)}")
+        logger.error(f"Exception in execute_agent: {type(e).__name__}: {str(e)}")
         import traceback
         traceback.print_exc()
         return {
@@ -97,15 +105,18 @@ async def execute_agent_stream(request: dict):
     Streaming version of execute_agent that yields events in real-time.
     Entry after API call: always delegate to Veritas parent agent with streaming.
     """
-    # Extract user_id and message from request
-    user_id = request.get("request").get("user_info").get("user_id")
+    # Extract user_id, character_id, server_id and message from request
+    user_info = request.get("request").get("user_info", {})
+    user_id = user_info.get("user_id")
+    character_id = user_info.get("character_id")
+    server_id = user_info.get("server_id")
     message = request.get("request").get("user_query")
     
     # Create executor with the root agent
     executor = AgentExecutor(root_agent, "Veritas_Agent")
     
     # Initialize session - this stores the execution_id in executor._sessions
-    execution_id = await executor.init(user_id)
+    execution_id = await executor.init(user_id, character_id=character_id, server_id=server_id)
     
     # Yield initial status
     yield {

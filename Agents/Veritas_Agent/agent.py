@@ -16,9 +16,21 @@ from google.genai import types
 from .sub_agents import (
     agent_delegator_sub_agent
 )
-# Configure API credentials
-os.environ["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY", "")
-# Alternatively, you can use Vertex AI
+# Configure API credentials - ensure we have a valid API key
+api_key = os.environ.get("GOOGLE_API_KEY")
+if not api_key:
+    # Try to load from .env file
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+        api_key = os.environ.get("GOOGLE_API_KEY")
+    except ImportError:
+        pass
+
+if not api_key:
+    raise ValueError("GOOGLE_API_KEY environment variable is required. Please set it in your environment or .env file.")
+
+os.environ["GOOGLE_API_KEY"] = api_key
 
 logging.basicConfig(level=logging.INFO)
 

@@ -39,7 +39,7 @@ def create_app():
         # Add middleware to log all requests
         @app.middleware("http")
         async def log_requests(request, call_next):
-            logger.info(f"Received request: {request.method} {request.url}")
+            logger.info(f"Received request.")
             try:
                 response = await call_next(request)
                 logger.info(f"Response status: {response.status_code}")

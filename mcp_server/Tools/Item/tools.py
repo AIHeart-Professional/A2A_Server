@@ -111,10 +111,10 @@ async def read_item_tool(item: dict) -> dict:
         
         # Build query based on provided parameters
         query = {}
-        print(f"item information: {item}")
+        logger.info(f"item information: {item}")
         if "item_name" in item and item["item_name"]:
             query["item_name"] = item["item_name"]
-        print(f"query: {query}")
+        logger.info(f"query: {query}")
         result = await db.read_one("items", query)
         
         # Close database connection

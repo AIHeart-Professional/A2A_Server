@@ -6,7 +6,6 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import numpy as np
-from sentence_transformers import SentenceTransformer
 import tiktoken
 
 logger = logging.getLogger(__name__)
@@ -28,8 +27,16 @@ class ContextManager:
     
     def __init__(self, db_path: str = "conversation_context.db", embedding_model: str = "all-MiniLM-L6-v2"):
         self.db_path = db_path
-        self.embedding_model = SentenceTransformer(embedding_model)
         self.encoding = tiktoken.get_encoding("cl100k_base")
+        
+        # Initialize embedding model for semantic search
+        try:
+            from sentence_transformers import SentenceTransformer
+            self.embedding_model = SentenceTransformer(embedding_model)
+        except ImportError:
+            logger.warning("sentence-transformers not available, using simple text matching")
+            self.embedding_model = None
+            
         self.init_database()
         
     def init_database(self):
@@ -91,7 +98,7 @@ class ContextManager:
                 msg_lower = msg.lower()
                 if any(trait in msg_lower for trait in ['tsundere', 'baka', 'idiot', 'not like', "it's not like"]):
                     personality_indicators.append("tsundere personality")
-                if any(emotion in msg_lower for trait in ['embarrassed', 'flustered', 'annoyed']):
+                if any(emotion in msg_lower for emotion in ['embarrassed', 'flustered', 'annoyed']):
                     personality_indicators.append("emotional responses")
             
             if personality_indicators:
@@ -109,7 +116,11 @@ class ContextManager:
         summary = await self.summarize_conversation_chunk(conversation)
         
         # Create embedding for semantic search
-        embedding = self.embedding_model.encode(f"{summary} {conversation}").tolist()
+        if self.embedding_model:
+            embedding = self.embedding_model.encode(f"{summary} {conversation}").tolist()
+        else:
+            # Fallback to simple hash-based embedding
+            embedding = [hash(f"{summary} {conversation}") % 1000 / 1000.0]
         
         # Count tokens
         tokens = self.count_tokens(conversation)
@@ -142,6 +153,10 @@ class ContextManager:
     async def retrieve_relevant_context(self, user_id: str, query: str, max_chunks: int = 5, max_tokens: int = 2000) -> str:
         """Retrieve relevant conversation context using semantic search"""
         # Create query embedding
+        if not self.embedding_model:
+            # Fallback to simple text matching without embeddings
+            return await self._simple_text_search(user_id, query, max_chunks, max_tokens)
+            
         query_embedding = self.embedding_model.encode(query).tolist()
         
         # Get all chunks for user
@@ -183,6 +198,72 @@ class ContextManager:
         total_tokens = 0
         
         for similarity, summary, content, tokens, timestamp in scored_chunks[:max_chunks]:
+            if total_tokens + tokens <= max_tokens:
+                context_parts.append(f"[Previous context - {timestamp[:10]}]: {summary}")
+                total_tokens += tokens
+            else:
+                break
+        
+        return "\n".join(context_parts)
+    
+    async def _simple_text_search(self, user_id: str, query: str, max_chunks: int = 5, max_tokens: int = 2000) -> str:
+        """Simple text-based search fallback when embeddings aren't available"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Get recent chunks and search by keyword matching
+        cursor.execute('''
+            SELECT summary, content, tokens, timestamp
+            FROM conversation_chunks 
+            WHERE user_id = ? AND (
+                LOWER(summary) LIKE LOWER(?) OR 
+                LOWER(content) LIKE LOWER(?)
+            )
+            ORDER BY timestamp DESC
+            LIMIT ?
+        ''', (user_id, f'%{query}%', f'%{query}%', max_chunks * 2))
+        
+        chunks = cursor.fetchall()
+        conn.close()
+        
+        if not chunks:
+            # If no keyword matches, return most recent chunks
+            return await self._get_recent_context(user_id, max_chunks, max_tokens)
+        
+        # Build context within token limit
+        context_parts = []
+        total_tokens = 0
+        
+        for summary, content, tokens, timestamp in chunks[:max_chunks]:
+            if total_tokens + tokens <= max_tokens:
+                context_parts.append(f"[Previous context - {timestamp[:10]}]: {summary}")
+                total_tokens += tokens
+            else:
+                break
+        
+        return "\n".join(context_parts)
+    
+    async def _get_recent_context(self, user_id: str, max_chunks: int = 5, max_tokens: int = 2000) -> str:
+        """Get most recent conversation context"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT summary, content, tokens, timestamp
+            FROM conversation_chunks 
+            WHERE user_id = ?
+            ORDER BY timestamp DESC
+            LIMIT ?
+        ''', (user_id, max_chunks))
+        
+        chunks = cursor.fetchall()
+        conn.close()
+        
+        # Build context within token limit
+        context_parts = []
+        total_tokens = 0
+        
+        for summary, content, tokens, timestamp in chunks:
             if total_tokens + tokens <= max_tokens:
                 context_parts.append(f"[Previous context - {timestamp[:10]}]: {summary}")
                 total_tokens += tokens
