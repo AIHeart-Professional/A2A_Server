@@ -1,0 +1,57 @@
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  simple:
+    format: '%(asctime)s -%(levelname)s: %(message)s'
+  detailed:
+    format: '%(asctime)s - %(levelname)s - %(filename)s - %(lineno)d - %(module)s: %(message)s'
+  colored:
+    '()': 'colorlog.ColoredFormatter'
+    format: '%(log_color)s%(asctime)s - %(levelname)s%(reset)s: %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
+    log_colors:
+      DEBUG:    'cyan'
+      INFO:     'green'
+      WARNING:  'yellow'
+      ERROR:    'red'
+      CRITICAL: 'red,bg_white'
+  agent_display:
+    format: '%(message)s'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: colored
+    stream: ext://sys.stdout
+
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: detailed
+    filename: logs/app.log
+    maxBytes: 10485760 # 10MB
+    backupCount: 5
+    encoding: utf8
+
+  agent_console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: agent_display
+    stream: ext://sys.stdout
+
+loggers:
+  my_project:
+    level: DEBUG
+    handlers: [console, file]
+    propagate: no
+  
+  agent:
+    level: INFO
+    handlers: [agent_console, file]
+    propagate: no
+
+root:
+  level: INFO
+  handlers: [console, file]

@@ -1,0 +1,58 @@
+intents:
+# character intents
+#__________________
+  # get characters
+  view_active_character:
+    tool: [get_character]
+    description: Get the active character for a user.
+    agent: [character]
+    required_fields: [user_id, server_id, active]
+    preset_fields: 
+      active: true
+  view_character_by_name:
+    tool: [get_character]
+    description: Get a character by name and tag.
+    agent: [character]
+    required_fields: [character_name, character_tag, server_id]
+  view_character_by_id:
+    tool: [get_character]
+    description: Get a character by ID.
+    agent: [character]
+    required_fields: [user_id, server_id]
+  # check character exists
+  character_exists:
+    tool: [character_name_available]
+    description: Check if a character exists by name and tag. Use user_id if character_name is not provided.
+    agent: [character]
+    required_fields: [character_name, character_tag, server_id]
+  # create character
+  create_character:
+    tool: [check_character_limit, character_name_available, create_character]
+    description: Create a new character with the provided details.
+    agent: [character]
+    required_fields: [characters_name, characters_class, user_id, server_id]
+  # check character limit
+  check_character_limit:
+    tool: [check_character_limit]
+    description: Check if the user has reached the character limit for the server.
+    agent: [character]
+    required_fields: [server_id, user_id]
+  # delete character
+  delete_character:
+    tool: [get_character, delete_character]
+    description: Delete a character by name and tag.
+    agent: [character]
+    required_fields: [server_id, character_name, character_tag]
+  #update character
+  update_character:
+    tool: [get_character, update_character]
+    description: Update any detail for a character, such as birthday, name, or other attributes. Use user_id if character_name is not provided.
+    agent: [character]
+    required_fields: [user_id, server_id]
+
+# Error intents
+#__________________
+  missing_fields:
+    tool: [missing_fields]
+    agent: [error]
+  

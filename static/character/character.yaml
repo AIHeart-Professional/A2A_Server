@@ -1,0 +1,43 @@
+{
+  "tools": {
+    "check_character_limit": {
+      "fields": ["server_id", "user_id"],
+      "instructions": "Check if the user has reached the character limit for the server."
+    },
+    "character_name_available": {
+      "fields": ["server_id", "character_name", "character_tag"],
+      "instructions": "Check if the character name is available in the server or if it a character already exists."
+    },
+    "get_character": {
+      "fields": ["server_id", "user_id?", "character_name?", "character_tag?", "active?"],
+      "instructions": "Retrieve a character's information from the server. If character_name is not provided, use user_id to get the active character."
+    },
+    "create_character": {
+      "fields": [
+        "characters_name", "characters_tag", "characters_class", "user_id", "server_id", "first_name?", "last_name?",
+        "cursor_color?", "height?", "physique?", "age?", "birthday?", "bio?", "level?", "experience?",
+        "experience_to_next_level?", "equipment?", "consumables?", "misc?", "cratable?", "key_items?",
+        "currency?", "head?", "chest?", "legs?", "arms?", "accessory1?", "accessory2?", "left_hand?", "right_hand?",
+        "guild?", "party?", "hp?", "str?", "def?", "spe?", "dex?", "cha?", "points_to_distribute?", "status_ailment?",
+        "battle_status?", "damage?", "defense?", "current_hp?", "active?"
+      ],
+      "instructions": "Create a new character with the provided details."
+    },
+    "delete_character": {
+      "fields": ["character_name", "character_tag", "server_id"],
+      "instructions": "Delete a character by name and tag."
+    },
+    "update_character": {
+      "fields": [
+        "character_name", "characters_tag", "user_id", "server_id", "first_name?", "last_name?", "characters_class?",
+        "cursor_color?", "height?", "physique?", "age?", "birthday?", "bio?", "level?", "experience?",
+        "experience_to_next_level?", "equipment?", "consumables?", "misc?", "cratable?", "key_items?",
+        "currency?", "head?", "chest?", "legs?", "arms?", "accessory1?", "accessory2?", "left_hand?",
+        "right_hand?", "guild?", "party?", "hp?", "str?", "def?", "spe?", "dex?", "cha?",
+        "points_to_distribute?", "status_ailment?", "battle_status?", "damage?",
+        "defense?", "current_hp?"
+      ],
+      "instructions": "Update any detail for a character, such as birthday, name, or other attributes. Use user_id if character_name is not provided."
+    }
+  }
+}

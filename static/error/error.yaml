@@ -1,0 +1,7 @@
+{
+  tools: {
+    missing_fields: {
+      fields: [server_id, user_id, missing_fields]
+    }
+  }
+}
